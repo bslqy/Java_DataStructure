@@ -1,5 +1,6 @@
 package LinkList;
 
+import javax.swing.*;
 import java.util.Stack;
 
 public class SingleLinkListDemo {
@@ -7,9 +8,10 @@ public class SingleLinkListDemo {
         SingleLinkedList singleLinkedList = new SingleLinkedList();
 
         HeroNode hero1 = new HeroNode(1,"宋江","及时雨");
-        HeroNode hero2 = new HeroNode(2,"卢俊义","玉麒麟");
-        HeroNode hero3 = new HeroNode(3,"吴用","智多星");
-        HeroNode hero4 = new HeroNode(4 ,"林冲","豹子头");
+        HeroNode hero2 = new HeroNode(3,"卢俊义","玉麒麟");
+        HeroNode hero3 = new HeroNode(5,"吴用","智多星");
+        HeroNode hero4 = new HeroNode(7 ,"林冲","豹子头");
+
         singleLinkedList.addByOrder(hero3);
         singleLinkedList.addByOrder(hero4);
         singleLinkedList.addByOrder(hero2);
@@ -25,14 +27,39 @@ public class SingleLinkListDemo {
 //        singleLinkedList.delete(1);
 //        singleLinkedList.list();
 
-        System.out.println("测试单链表翻转");
-
-//        System.out.println(getLength(singleLinkedList.getHead()));
-//        reverseLinkList(singleLinkedList.getHead());
-//        singleLinkedList.list();
-
+//        System.out.println("测试单链表翻转");
+//
+//        HeroNode pre = reverseLinkList(singleLinkedList.getHead());
+//        SingleLinkedList reversedLinklist = new SingleLinkedList();
+//        reversedLinklist.add(pre);
+//        reversedLinklist.list();
+//
         System.out.println("测试单链表反打");
         reversPrint(singleLinkedList.getHead());
+
+        System.out.println("测试两个单链表合并");
+        System.out.println("链表1");
+        singleLinkedList.list();
+        SingleLinkedList singleLinkedList1 = new SingleLinkedList();
+        HeroNode hero5 = new HeroNode(2,"宋江1","及时雨");
+        HeroNode hero6 = new HeroNode(4,"卢俊义2","玉麒麟");
+        HeroNode hero7 = new HeroNode(6,"吴用2","智多星");
+        HeroNode hero8 = new HeroNode(8 ,"林冲2","豹子头");
+        singleLinkedList1.add(hero5);
+        singleLinkedList1.add(hero6);
+        singleLinkedList1.add(hero7);
+        singleLinkedList1.add(hero8);
+        System.out.println("链表2");
+        singleLinkedList1.list();
+
+
+        HeroNode h =  mergeTwoLinkedList(singleLinkedList.getHead().next,singleLinkedList1.getHead().next);
+
+        SingleLinkedList singleLinkedList2 = new SingleLinkedList();
+        singleLinkedList2.add(h);
+        System.out.println("合并后");
+        singleLinkedList2.list();
+
 
 
     }
@@ -80,26 +107,25 @@ public class SingleLinkListDemo {
     }
 
     //链表的翻转
-    public static void reverseLinkList(HeroNode head){
-        // 带头结点链表
+    public static HeroNode reverseLinkList(HeroNode head){
+        // 带头结点链表,所以有只有一个节点要next两次
         // 如果当前链表为空，或者只有一个节点，直接返回
-        if(head.next == null || head.next.next == null) return ;
+        if(head.next == null || head.next.next == null) return null;
 
+        HeroNode pre = null;
         HeroNode cur = head.next;
-        HeroNode next = null;
+
         // 新的头结点
-        HeroNode reverseHead = new HeroNode(0,"","");
+
 
         while(cur != null){
-            next  = cur.next;
-            cur.next =  reverseHead.next;
-            reverseHead.next = cur;
+            HeroNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
             cur = next;
 
         }
-        //处理最后一个节点
-        head.next = reverseHead.next;
-
+        return pre;
 
 
     }
@@ -122,6 +148,41 @@ public class SingleLinkListDemo {
 
     }
 
+    //两个单链表合并后依然有序
+    public static HeroNode mergeTwoLinkedList(HeroNode head1,HeroNode head2)
+    {
+        // 如果第一个链表为空，返回第二个链表的头结点
+        if (head1 == null){
+            return head2;
+        }
+        if(head2 == null){
+            return  head1;
+        }
+        HeroNode root = new HeroNode(0,"",":");
+        HeroNode cur = root;
+
+        while(head1 != null && head2 != null){
+            if(head1.no < head2.no){
+                cur.next = head1;
+                head1 = head1.next;
+            }
+            else{
+                cur.next = head2;
+                head2 = head2.next;
+            }
+            cur = cur.next;
+
+        }
+        // 如果列表1完了，返回列表二剩下的
+        if(head1 != null){
+            cur.next = head1;
+        }
+        if(head2 != null){
+            cur.next = head2;
+        }
+        return root.next;
+
+    }
 
 
 }
@@ -136,6 +197,8 @@ class SingleLinkedList{
     public HeroNode getHead() {
         return head;
     }
+
+
 
     // 添加节点
     // 思路,当不考虑编号的顺序时
