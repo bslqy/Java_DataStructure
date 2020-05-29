@@ -29,7 +29,7 @@ public class QuickSort {
             arr[i] = arr[j];
 
             //后看左边，依次往右递增，直到找到大于基准数的数字
-            while(arr[i] <= tmp && i < j) {
+            while(arr[i] < tmp && i < j) {
                 i++;
             }
             //比基准大的记录移到高端
