@@ -77,6 +77,27 @@ public class binaryTreeDemo {
             }
         }
 
+        public HeroNode preOrderSerach(int no) {
+            if (root != null) {
+                return root.preOrderSearch(no);
+            }
+            return null;
+        }
+
+        public HeroNode infixOrderSerach(int no) {
+            if (root != null) {
+                return root.infixOrderSearch(no);
+            }
+            return null;
+        }
+
+        public HeroNode postOrderSearch(int no) {
+            if (root != null) {
+                return root.postOrderSearch(no);
+            }
+            return null;
+        }
+
 
     }
 
@@ -235,12 +256,12 @@ public class binaryTreeDemo {
         }
 
         // 后序查找
-        public HeroNode PostOrderSearch(int no) {
+        public HeroNode postOrderSearch(int no) {
             HeroNode resNode = null;
 
             // 先从左节点查找
             if (this.left != null) {
-                resNode = this.left.PostOrderSearch(no);
+                resNode = this.left.postOrderSearch(no);
             }
 
             // 如果左节点找到，则返回
@@ -250,7 +271,7 @@ public class binaryTreeDemo {
 
             // 再从右节点查找
             if (this.right != null) {
-                resNode = this.right.PostOrderSearch(no);
+                resNode = this.right.postOrderSearch(no);
             }
 
             if (resNode != null) {
