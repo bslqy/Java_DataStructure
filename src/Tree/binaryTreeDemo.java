@@ -11,6 +11,8 @@ public class binaryTreeDemo {
      *            2     3
      *                /  \
      *               5    4
+     *                \
+     *                 7
      *
      * 前序遍历: 先输出父节点，再遍历左子树和右子树
      * 中序遍历: 先遍历左子树，再输出父节点，再遍历右子树
@@ -25,22 +27,33 @@ public class binaryTreeDemo {
         HeroNode node3= new HeroNode(3,"卢俊义");
         HeroNode node4 = new HeroNode(4,"林冲");
         HeroNode node5 = new HeroNode(5,"关胜");
+        HeroNode node6 = new HeroNode(6,"鲁智深");
+        HeroNode node7 = new HeroNode(7,"武松");
 
         root.setLeft(node2);
         root.setRight(node3);
         node3.setRight(node4);
         node3.setLeft(node5);
+//        node5.setLeft(node6);
+        node5.setRight(node7);
         binaryTree.setRoot(root);
 
         // 测试
         System.out.println("前序遍历");
         binaryTree.preOrder(); // 1,2,3,5,4
 
-        System.out.println("中序遍历");
-        binaryTree.infixOrder();; // 2,1,5,3,4
 
-        System.out.println("后序遍历");
-        binaryTree.postOrder(); // 2,5,4,3,1
+        binaryTree.delNode(5);
+        System.out.println("删除后");
+        binaryTree.preOrder();
+
+//        System.out.println("中序遍历");
+//        binaryTree.infixOrder();; // 2,1,5,3,4
+//
+//        System.out.println("后序遍历");
+//        binaryTree.postOrder(); // 2,5,4,3,1
+
+
     }
 }
     class BinaryTree{
@@ -96,6 +109,22 @@ public class binaryTreeDemo {
                 return root.postOrderSearch(no);
             }
             return null;
+        }
+
+        public void delNode(int no) {
+            // 首先判断root是否为空
+            if (root != null) {
+                // 如果只有一个root节点,判断root是否是要删除的节点
+                if (root.getNo() == no) {
+                    root = null;
+                    return;
+                }
+                // 否则,开始递归删除
+                root.delNode(no);
+            }
+            else {
+                System.out.println("空树,不能删除");
+            }
         }
 
 
@@ -284,6 +313,98 @@ public class binaryTreeDemo {
             }
 
             return resNode;
+
+        }
+
+        // 递归删除节点
+        // 1.如果删除的节点是叶子节点,则删除改节点
+        // 2.如果删除的节点是非叶子节点,则删除改子树
+
+        public void delNode(int no) {
+            /***
+             * 1. 因为我们的二叉树是单向的，所以我们是判断当前结点的子结点是否需要删除结点，而不能去判断当前这个结点是不是需要删除结点.
+             * 2. 如果当前结点的左子结点不为空，并且左子结点就是要删除结点，就将this.left = null; 并且就返回 (结束递归删除)
+             * 3. 如果当前结点的右子结点不为空，并且右子结点就是要删除结点，就将this.right= null ;并且就返回 (结束递归删除)
+             * 4. 如果第2 和第3 步没有删除结点，那么我们就需要向左子树进行递归删除
+             * 5. 如果第4 步也没有删除结点，则应当向右子树进行递归删除.
+             */
+
+
+
+            // 2. 如果当前结点的左子结点不为空，并且左子结点就是要删除结点，就将this.left = null; 并且就返回 (结束递归删除)
+            if (this.left != null && this.left.no == no) {
+
+                if(this.left.left == null && this.left.right !=null){
+                    this.left.setName(this.left.right.getName());
+                    this.left.setNo(this.left.right.getNo());
+                    this.left.right = null;
+                    return;
+                }
+
+//                this.left = null;
+
+                if(this.left.left != null && this.left.right ==null){
+                    this.left.setName(this.left.left.getName());
+                    this.left.setNo(this.left.left.getNo());
+                    this.left.left = null;
+                    return;
+                }
+
+                if (this.left.left != null && this.left.right !=null){
+                    this.left.setName(this.left.left.getName());
+                    this.left.setNo(this.left.left.getNo());
+                    this.left.left = null;
+                    return;
+                }
+
+                // 是叶子节点
+                this.left = null;
+                return ;
+
+
+            }
+            // 3. 如果当前结点的右子结点不为空，并且右子结点就是要删除结点，就将this.right= null ;并且就返回 (结束递归删除)
+            if (this.right != null && this.right.no == no) {
+
+                if (this.right.left != null && this.right.right !=null){
+                    this.right.setName(this.right.left.getName());
+                    this.right.setNo(this.right.left.getNo());
+                    this.right.left = null;
+                    return;
+                }
+
+                if(this.right.left == null && this.right.right !=null){
+                    this.right.setName(this.right.right.getName());
+                    this.right.setNo(this.right.right.getNo());
+                    this.right.right = null;
+                    return;
+                }
+
+//                this.left = null;
+
+                if(this.right.left != null && this.right.right ==null){
+                    this.right.setName(this.right.left.getName());
+                    this.right.setNo(this.right.left.getNo());
+                    this.right.left = null;
+                    return;
+                }
+
+
+
+                this.right = null;
+                return;
+            }
+            // 4. 如果第2 和第3 步没有删除结点，那么我们就需要向左子树进行递归删除
+            if (this.left != null) {
+                this.left.delNode(no);
+            }
+            // 5. 如果第4 步也没有删除结点，则应当向右子树进行递归删除.
+            if (this.right != null) {
+                this.right.delNode(no);
+            }
+
+
+            return ;
 
         }
     }
