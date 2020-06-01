@@ -1,5 +1,7 @@
 package Tree;
 
+
+
 public class binaryTreeDemo {
 
     /**
@@ -9,6 +11,11 @@ public class binaryTreeDemo {
      *            2     3
      *                /  \
      *               5    4
+     *
+     * 前序遍历: 先输出父节点，再遍历左子树和右子树
+     * 中序遍历: 先遍历左子树，再输出父节点，再遍历右子树
+     * 后序遍历: 先遍历左子树，再遍历右子树，最后输出父节点
+     * 小结: 看输出父节点的顺序，就确定是前序，中序还是后序
      */
 
     public static void main(String[] args) {
@@ -134,8 +141,6 @@ public class binaryTreeDemo {
                 this.right.preOrder();
             }
 
-
-
         }
 
         // 中序遍历
@@ -169,6 +174,95 @@ public class binaryTreeDemo {
 
             // 输出父节点
             System.out.println(this);
+
+        }
+
+
+        // 前序查找
+        public HeroNode preOrderSearch(int no) {
+            HeroNode resNode = null;
+
+            // 先从父节点查找
+            if (this.no == no) {
+                return  this;
+            }
+
+            // 再从左节点查找
+            if (this.left != null) {
+                resNode = this.left.preOrderSearch(no);
+            }
+
+            // 如果左节点找到，则返回
+            if (resNode != null) {
+                return resNode;
+            }
+
+            // 否则继续父节点的子节点查找
+            if (this.right != null) {
+                resNode = this.right.preOrderSearch(no);
+            }
+
+            return resNode;
+
+        }
+
+        // 中序查找
+        public HeroNode infixOrderSearch(int no) {
+            HeroNode resNode = null;
+
+            // 先从左节点查找
+            if (this.left != null) {
+                resNode = this.left.infixOrderSearch(no);
+            }
+
+            // 如果左节点找到，则返回
+            if (resNode != null) {
+                return resNode;
+            }
+
+            // 再从父节点查找
+            if (this.no == no) {
+                return  this;
+            }
+
+            // 否则继续父节点的子节点查找
+            if (this.right != null) {
+                resNode = this.right.infixOrderSearch(no);
+            }
+
+            return resNode;
+
+        }
+
+        // 后序查找
+        public HeroNode PostOrderSearch(int no) {
+            HeroNode resNode = null;
+
+            // 先从左节点查找
+            if (this.left != null) {
+                resNode = this.left.PostOrderSearch(no);
+            }
+
+            // 如果左节点找到，则返回
+            if (resNode != null) {
+                return resNode;
+            }
+
+            // 再从右节点查找
+            if (this.right != null) {
+                resNode = this.right.PostOrderSearch(no);
+            }
+
+            if (resNode != null) {
+                return resNode;
+            }
+
+            // 再从父节点查找
+            if (this.no == no) {
+                return  this;
+            }
+
+            return resNode;
 
         }
     }
