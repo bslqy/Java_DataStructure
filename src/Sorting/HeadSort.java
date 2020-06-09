@@ -16,7 +16,7 @@ public class HeadSort {
 
         // 第一次要把整个调整为大顶堆
         for (int i = arr.length/2 - 1; i >= 0 ; i--) {
-            adjustHeap(arr,i,arr.length);
+            adjustHeapRecursive(arr,i,arr.length);
         }
 
 
@@ -27,7 +27,7 @@ public class HeadSort {
             temp = arr[j];
             arr[j] = arr[0];
             arr[0] = temp;
-            adjustHeap(arr,0,j);
+            adjustHeapRecursive(arr,0,j);
 
         }
 
@@ -63,5 +63,28 @@ public class HeadSort {
        // 把原来的值放下来
             arr[i] = temp;
         }
+    }
+
+    public static void adjustHeapRecursive(int arr[], int i, int length) {
+
+        int min = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left < length && arr[left] < arr[min]) {
+            min = left;
+
+        }
+        if (right < length && arr[right] < arr[min]) {
+            min = right;
+        }
+
+        if (min != i) {
+            int temp  = arr[i];
+            arr[i] = arr[min];
+            arr[min] = temp;
+            // 继续堆化子节点. 因为担心子树下面的节点不符合堆的定义
+            adjustHeapRecursive(arr,min,length);
+        }
+
     }
 }
