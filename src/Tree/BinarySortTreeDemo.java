@@ -33,6 +33,10 @@ public class BinarySortTreeDemo {
 class BinaryTree2 {
     private Node root;
 
+    public Node getRoot() {
+        return root;
+    }
+
     public void add(Node node) {
         if (root == null) {
             root = node;
@@ -67,6 +71,17 @@ class BinaryTree2 {
         return root.searchParent(value);
     }
 
+    public int deleteRightTreeMin(Node node) {
+        Node target = node;
+        while (target.left != null) {
+            target = target.left;
+        }
+        // 已经指向最小节点
+        deleteNode(target.value);
+        // 返回最小节点对应的值
+        return target.value;
+    }
+
     // 删除节点
     public void deleteNode(int value) {
         if (root == null) {
@@ -89,10 +104,55 @@ class BinaryTree2 {
         // 情况1：如果删除的节点是叶子节点
         if (targetNode.left == null && targetNode.right ==null) {
             // 判断targetNode是parentNode的左或者右子节点
+            // 然后根据情况删除
             if (parent.left != null && parent.left.value == value) {
                 parent.left = null;
             } else if (parent.right != null && parent.right.value == value) {
                 parent.right = null;
+            }
+
+        } else if (targetNode.left != null && targetNode.right != null) {
+            // 情况3: 删除有2颗子树的节点. 为了不破坏左节点比右节点小的规律,从最右边开始找最小或者从最左边开始找最大
+            int min = deleteRightTreeMin(targetNode.right);
+            targetNode.value = min;
+
+        } else{
+            //情况2: 删除只有一颗子树的节点
+            // 如果要删除的节点有左子节点
+            // 如果targetNode是parentNode的左节点
+            if (targetNode.left != null) {
+                // 大于一层的情况,正常逻辑
+                if (parent != null) {
+                    // 如果targetNode是parentNode的左节点
+                    if (parent.left.value == value) {
+                        // 把目标节点的子节点 替换 目标节点
+                        parent.left = targetNode.left;
+                    }
+
+                    // 如果targetNode是parentNode的右子节点
+                    else {
+                        parent.right = targetNode.left;
+                    }
+                }
+                // 只剩下一层的情况,特殊处理.直接把root指向子节点
+                else {
+                    root = targetNode.left;
+                }
+            }
+            // 要删除的节点有 右子节点
+            else {
+                if (parent != null) {
+                    if (parent.left.value == value) {
+                        // 如果targetNode是parentNode的左节点
+                        parent.left = targetNode.right;
+                    } else {
+                        // 如果targetNode是parentNode的右子节点
+                        parent.right = targetNode.right;
+                    }
+                }
+                else{
+                    root = targetNode.right;
+                }
             }
 
         }
