@@ -2,7 +2,7 @@ package Sorting;
 
 import java.util.Arrays;
 
-public class HeadSort {
+public class HeapSort {
     public static void main(String[] args) {
         int[] arr = {4, 6, 8, 5, 9,-1,90,89,3};
         heapSort(arr);
