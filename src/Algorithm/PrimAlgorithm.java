@@ -3,6 +3,14 @@ package Algorithm;
 import java.util.Arrays;
 
 public class PrimAlgorithm {
+    /***
+     *
+     * 1) 设 G=(V,E)是连通网，T=(U,D)是最小生成树，V,U 是顶点集合，E,D 是边的集合
+     * 2) 若从顶点 u 开始构造最小生成树，则从集合 V 中取出顶点 u 放入集合 U 中，标记顶点 v 的 visited[u]=1
+     * 3) 若集合 U 中顶点 ui 与集合 V-U 中的顶点 vj 之间存在边，则寻找这些边中权值最小的边，
+     *    但不能构成回路，将 顶点 vj 加入集合 U 中，将边（ui,vj）加入集合 D 中，标记 visited[vj]=1
+     * 4) 重复步骤②，直到 U 与 V 相等，即所有顶点都被标记为访问过，此时 D 中有 n-1 条边
+     */
     public static void main(String[] args) {
         char[] data = new char[]{'A','B','C','D','E','F','G'};
         int verxs = data.length;
